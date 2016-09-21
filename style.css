@@ -1,0 +1,263 @@
+/*
+ Theme Name:   CAHNRSWP Newsletters
+ Theme URI:    cahnrs.wsu.edu/web/themes/newsletter
+ Description:  Spine child theme for newsletters
+ Author:       CAHNRS Communications, Danial Bleile
+ Author URI:   http://cahnrs/communications
+ Template:     WSUWP-spine-parent-theme
+ Version:      0.0.1
+*/
+body {
+	font-size: 14px;
+}
+
+
+.layout-container {
+	margin-left: 200px;
+	box-sizing: border-box;
+}
+
+.content-container {
+	padding-left: 2rem;
+	box-sizing: border-box;
+}
+/* Global Navigation
+-------------------------------------------------------------*/
+#global-header nav.primary{
+	background-color: #3b4043;
+}
+
+#global-header nav.primary{
+	position: relative;
+	height: 32px;
+}
+
+#global-header nav.primary:before,
+#global-header nav.primary:after {
+	content: '';
+	background-color: #3b4043;
+	position: absolute;
+	top: 0;
+	left: 100%;
+	width: 9999rem;
+	height: 100%;
+	display: block;
+}
+
+#global-header nav.primary:before {
+	right: 100%;
+	left: auto;
+}
+
+#global-header nav.primary .menu-container {
+	display: inline-block;
+}
+
+#global-header nav.primary ul.menu {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#global-header nav.primary ul.menu:after {
+	content:'';
+	display: block;
+	clear: both;
+}
+
+#global-header nav.primary ul.menu > li {
+	display: block;
+	float: left;
+	vertical-align: baseline;
+	margin: 0;
+	padding: 0;
+}
+
+#global-header nav.primary ul.menu > li > a {
+	display: block;
+	margin: 0;
+	padding: 0 2rem;
+	height: 32px;
+	line-height: 32px;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 0.9rem;
+	letter-spacing: 1px;
+}
+
+#global-header nav.primary ul.menu > li.active > a{
+	background-color: #ada400;
+}
+
+#global-header .banner-primary {
+	background-color: #000;
+	text-align: center;
+	position: relative;
+	height: 136px;
+}
+
+#global-header .banner-primary img {
+	height: 130px;
+	width: auto;
+}
+
+#global-header .banner-primary:after,
+#global-header .banner-primary:before {
+	content: '';
+	background-color: #000;
+	position: absolute;
+	top: 0;
+	right: 100%;
+	width: 9999rem;
+	height: 100%;
+	display: block;
+}
+
+#global-header .banner-primary:after {
+	left: 100%;
+	right: auto;
+}
+
+#global-header .subtitle {
+	background-color: #ada400;
+	text-align: center;
+	position: relative;
+}
+
+#global-header .subtitle:after,
+#global-header .subtitle:before {
+	content: '';
+	background-color: #ada400;
+	position: absolute;
+	top: 0;
+	right: 100%;
+	width: 9999rem;
+	height: 100%;
+	display: block;
+}
+
+#global-header .subtitle:after {
+	left: 100%;
+	right: auto;
+}
+
+#global-header .subtitle a {
+	height: 30px;
+	line-height: 30px;
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 0.9rem;
+	text-align: center;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+@media only screen and (max-width: 1200px) {
+	#global-header nav.primary ul.menu > li > a {
+
+		padding: 0 1.25rem;
+		height: 32px;
+		line-height: 32px;
+		color: #fff;
+		text-transform: uppercase;
+		font-size: 0.8rem;
+		letter-spacing: 1px;
+	}
+}
+
+@media only screen and (max-width: 989px) {
+	#global-header {
+		padding-top: 50px;
+	}
+	#global-header nav.primary {
+		height: auto;
+	}
+	
+	#global-header nav.primary ul.menu > li > a {
+
+		padding: 0 1.25rem;
+		height: 40px;
+		line-height: 40px;
+		color: #fff;
+		text-transform: uppercase;
+		font-size: 0.8rem;
+		letter-spacing: 1px;
+	}
+	
+	#global-header nav.primary .menu-container.primary-menu {
+		display: block;
+		margin-right: 60px;
+	}
+	
+	#global-header nav.primary .menu-container.secondary-menu {
+		width: 60px;
+		height: 40px;
+		line-height: 40px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		border-left: 1px solid #555;
+	}
+	
+	#global-header nav.primary .menu-container.secondary-menu > ul {
+		display: none;
+	}
+	
+	#global-header nav.primary ul.menu > li {
+		width: 33.33%;
+		text-align: center;
+	}
+	
+	#global-header .banner-primary {
+		height: auto;
+	}
+	
+	#global-header .banner-primary img {
+		height: auto;
+		max-width: 90%;
+	}
+	
+	.layout-container {
+		margin-left: 0px;
+	}
+	
+}
+
+@media only screen and (max-width: 500px) {
+	#global-header nav.primary ul.menu > li > a {
+		padding: 0 1rem;
+		font-size: 0.7rem;
+		letter-spacing: 0px;
+	}
+	
+}
+
+
+/* College Header
+-------------------------------------------------------------*/
+/*#college-header #college-nav {
+	position: relative;
+}
+
+#college-header #college-nav .title a {
+	text-transform: uppercase;
+	color: #fff;
+	display: block;
+	font-size: 14px;
+	line-height: 18px;
+	padding: 8px 0;
+}
+
+#college-header #college-nav #college-actions {
+	position: absolute;
+	top: 0;
+	right: 2rem;
+}
+
+#college-header #college-nav #college-actions a {
+	display: inline-block;
+	font-size: 12px;
+	padding: 10px 0;
+	line-height: 14px;
+}*/
+
