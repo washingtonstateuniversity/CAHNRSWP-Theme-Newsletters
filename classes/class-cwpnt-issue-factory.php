@@ -1,34 +1,6 @@
 <?php
 
-class CWPNT_Issue_Factory {
-	
-	protected $theme_dir;
-	protected $theme_url;
-	
-	
-	public function get_theme_dir() { return $this->theme_dir; }
-	public function get_theme_url() { return $this->theme_url; }
-	
-	
-	public function set_theme_dir( $dir ) { $this->theme_dir = $dir; }
-	public function set_theme_url( $url ) { $this->theme_url = $url; }
-	
-	
-	public function __construct( $theme_dir = '' , $theme_url = '' ){
-		
-		$this->set_theme_dir( $theme_dir );
-		$this->set_theme_url( $theme_url );
-		
-		require_once $this->theme_dir .'/classes/class-cwpnt-post-type.php';
-		require_once $this->theme_dir .'/classes/class-cwpnt-issue.php';
-		
-		if ( is_admin() ){
-			
-			require_once $this->theme_dir .'/classes/class-cwpnt-issue-admin.php';
-			
-		} // end if
-		
-	} // end __construct
+class CWPNT_Issue_Factory extends CWPNT_Factory {
 	
 	
 	public function return_current_issue(){
@@ -55,8 +27,12 @@ class CWPNT_Issue_Factory {
 	
 	public function return_issue(){
 		
+		require_once $this->theme_dir .'/classes/class-cwpnt-post-type.php';
+		require_once $this->theme_dir .'/classes/class-cwpnt-issue.php';
+		
 		if ( is_admin() ){
 			
+			require_once $this->theme_dir .'/classes/class-cwpnt-issue-admin.php';
 			$issue = new CWPNT_Issue_Admin( $this->theme_dir , $this->theme_url );
 			
 		} else {

@@ -1,6 +1,6 @@
 <?php
 
-class CWPNT_Post_type {
+abstract class CWPNT_Post_type {
 	
 	protected $theme_dir;
 	protected $theme_url;
@@ -51,6 +51,12 @@ class CWPNT_Post_type {
 			add_action( 'edit_form_after_title' , array( $this , 'action_edit_form_after_title' ) , 10 );
 			
 		} // end if
+		
+		if ( method_exists( $this , 'do_action_admin_enqueue_scripts' ) ) {
+			
+			add_action( 'admin_enqueue_scripts', array( $this , 'do_action_admin_enqueue_scripts' ) , 10 );
+			
+		} // end if;
 		
 	} // end do_init
 	

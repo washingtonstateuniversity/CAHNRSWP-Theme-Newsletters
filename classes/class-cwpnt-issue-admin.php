@@ -3,14 +3,6 @@
 class CWPNT_Issue_Admin extends CWPNT_Issue {
 	
 	
-	public function do_init(){
-		
-		parent::do_init();
-		
-		add_action( 'admin_enqueue_scripts', array( $this , 'do_action_admin_enqueue_scripts' ) );
-		
-	} // end do_init
-	
 	
 	public function do_action_edit_form_after_title( $post ){
 		

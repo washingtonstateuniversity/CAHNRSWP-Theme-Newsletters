@@ -27,12 +27,27 @@ class CWPNT_Site {
 		
 	} // end __construct
 	
+	public function init(){
+		
+		add_action( 'init', array( $this , 'do_register_menus' ) );
+		
+		add_action( 'admin_menu', array( $this ,'do_remove_menu_items' ), 99 );
+		
+	} // end init
+	
 	public function do_register_menus(){
 		 
 		 register_nav_menu('newsletter-menu' , 'Newsletter Menu');
 		 register_nav_menu('newsletter-menu-extra' , 'Newsletter Menu Extra');
 		 
 	 } // end do_register_menus
+	 
+	 
+	 public function do_remove_menu_items(){
+		 
+		 remove_menu_page( 'edit.php' );
+		 
+	 } // do_remove_menu_items
 	 
 	 
 	 public function do_errors(){
