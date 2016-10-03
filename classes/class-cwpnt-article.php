@@ -15,6 +15,7 @@ class CWPNT_Article extends CWPNT_Post_type {
 		'capability_type'    => 'post',
 		'has_archive'        => true,
 		'hierarchical'       => false,
+		'taxonomies'         => array('post_tag'),
 		'menu_position'      => null,
 		'supports'           => array( 'title', 'author', 'editor' ),
 	);
@@ -39,11 +40,37 @@ class CWPNT_Article extends CWPNT_Post_type {
 	
 	public function do_action_edit_form_after_title( $post ){
 		
-		$html = $this->return_editor_summary( $post );
+		ob_start();
+		
+		include $this->get_theme_dir() . '/includes/include-editor-subtitle.php';
+		
+		$primary_img_src = $this->get_theme_url() . '/images/placeholder.png';
+		$secondary_img_src = $this->get_theme_url() . '/images/placeholder.png';
+		include $this->get_theme_dir() . '/includes/include-editor-primary-secondary-images.php';
+	
+		
+		include $this->get_theme_dir() . '/includes/include-editor-excerpt.php';
+		include $this->get_theme_dir() . '/includes/include-editor-editor-header.php';
+		
+		$html = ob_get_clean();
 		
 		echo $html;
 		
 	} // end do_edit_form_after_title
+	
+	
+	public function do_action_edit_form_after_editor( $post ){
+		
+		ob_start();
+		
+		include $this->get_theme_dir() . '/includes/include-editor-contact.php';
+		include $this->get_theme_dir() . '/includes/include-editor-related.php';
+		
+		$html = ob_get_clean();
+		
+		echo $html;
+		
+	} // end do_action_edit_form_after_editor
 	
 	
 	public function return_editor_summary( $post ){
