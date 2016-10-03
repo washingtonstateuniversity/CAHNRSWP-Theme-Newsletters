@@ -1,0 +1,1 @@
+<<?php echo $tag;?>><?php echo apply_filters( 'the_title' , $title );?></<?php echo $tag;?>>

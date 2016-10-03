@@ -17,7 +17,7 @@ class CWPNT_Article extends CWPNT_Post_type {
 		'hierarchical'       => false,
 		'taxonomies'         => array('post_tag'),
 		'menu_position'      => null,
-		'supports'           => array( 'title', 'author', 'editor' ),
+		'supports'           => array( 'title', 'author', 'editor','thumbnail' ),
 	);
 	
 	protected $labels = array(
@@ -39,6 +39,10 @@ class CWPNT_Article extends CWPNT_Post_type {
 	
 	
 	public function do_action_edit_form_after_title( $post ){
+		
+		$this->do_set_by_wp_post( $post );
+		
+		$excerpt = $this->get_excerpt();
 		
 		ob_start();
 		
@@ -73,12 +77,74 @@ class CWPNT_Article extends CWPNT_Post_type {
 	} // end do_action_edit_form_after_editor
 	
 	
-	public function return_editor_summary( $post ){
+	public function return_display_featured_image( $post_id = false ){
 		
-		return 'summary field';
+		$html = '';
 		
-	} // end return_editor_summary
-
+		if ( ! $post_id ) $post_id = $this->get_id();
+		
+		if ( $this->do_set_featured_image() ){
+			
+			$image = $this->get_featured_image();
+			
+			ob_start();
+			
+			include( locate_template( 'includes/include-article-template-featured-image.php' ) );
+			
+			$html = ob_get_clean();
+			
+		} // end if
+		
+		return $html;
+		
+	} // end return_featured_image
 	
+	
+	public function return_display_title( $tag = 'h1' ){
+		
+		$title = $this->get_title();
+		
+		ob_start();
+			
+		include( locate_template( 'includes/include-article-template-title.php' ) );
+		
+		$html = ob_get_clean();
+		
+		return $html;
+		
+	} // end return_title_display
+	
+	
+	public function return_display_content(){
+		
+		$content = $this->get_content();
+		
+		ob_start();
+			
+		include( locate_template( 'includes/include-article-template-content.php' ) );
+		
+		$html = ob_get_clean();
+		
+		return $html;
+		
+	} //end return_display_content
+	
+	
+	public function return_display_pagination(){
+		
+		$html = '';
+		
+		return $html;
+		
+	} // end return_display_pagination
+	
+	
+	public function return_display_related(){
+		
+		$html = '';
+		
+		return $html;
+		
+	} // end return_display_related
 	
 } // end class

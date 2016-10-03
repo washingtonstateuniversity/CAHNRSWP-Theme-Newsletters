@@ -8,6 +8,8 @@ class CAHNRSWP_Theme_Newsletter {
 	
 	public $issue_factory;
 	
+	public $article_factory;
+	
 	public $site;
 	
 	

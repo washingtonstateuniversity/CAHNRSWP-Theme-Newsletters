@@ -1,5 +1,5 @@
 <?php $cwpnt = CAHNRSWP_Theme_Newsletter::get_instance();?>
-<header id="global-header" class="layout-container">
+<main><header id="global-header" class="layout-container">
 	<nav class="primary">
     	<?php 
 			wp_nav_menu( array( 'theme_location' => 'newsletter-menu', 'container_class' => 'menu-container primary-menu' ) ); 

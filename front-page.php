@@ -8,6 +8,6 @@ get_template_part( 'parts/header','global' );
 $issue->return_feature_area( true );
 $issue->return_primary_features( true );
 $issue->return_secondary_features( true );
-
+get_template_part( 'parts/footer','global' );
 get_footer();
 ?>

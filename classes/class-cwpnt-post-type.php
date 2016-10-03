@@ -12,6 +12,7 @@ abstract class CWPNT_Post_type {
 	protected $content = '';
 	protected $excerpt = '';
 	protected $link = '';
+	protected $featured_image = array();
 	
 	
 	public function get_theme_dir() { return $this->theme_dir; }
@@ -24,6 +25,7 @@ abstract class CWPNT_Post_type {
 	public function get_content() { return $this->content; }
 	public function get_excerpt() { return $this->excerpt; }
 	public function get_link() { return $this->link; }
+	public function get_featured_image() { return $this->featured_image; }
 	
 	
 	public function set_theme_dir( $dir ) { $this->theme_dir = $dir; }
@@ -33,6 +35,7 @@ abstract class CWPNT_Post_type {
 	public function set_content( $content ) { $this->content = $content; }
 	public function set_excerpt( $excerpt ) { $this->excerpt = $excerpt; }
 	public function set_link( $link ) { $this->link = $link; }
+	public function set_featured_image( $img_array ) { $this->featured_image = $img_array; }
 	
 	
 	public function __construct(){
@@ -96,6 +99,8 @@ abstract class CWPNT_Post_type {
 	
 	public function do_set_by_wp_post( $post ){
 		
+		if ( is_numeric( $post ) ) $post = get_post( $post );
+		
 		$this->set_id( $post->ID );
 		$this->set_title( $post->post_title );
 		$this->set_content( $post->post_content );
@@ -103,6 +108,34 @@ abstract class CWPNT_Post_type {
 		$this->set_link( get_post_permalink( $this->get_id() ) );
 		
 	} // end do_set_issue_by_wp_post
+	
+	
+	public function do_set_featured_image( $size = 'large' , $post_id = false ){
+		
+		if ( ! $post_id ) $post_id = $this->get_id();
+		
+		if ( has_post_thumbnail( $post_id ) ){
+			
+			$thumb_id = get_post_thumbnail_id( $post_id );
+			$image = wp_get_attachment_image_src( $thumb_id , $size );
+			
+			$img_array = array(
+				'src'           => $image[0],
+				'id'            => $thumb_id,
+				'caption_title' => get_post_meta( $post_id , '_featured_image_caption_title' , true ),
+				'caption'       => get_post_meta( $post_id , '_featured_image_caption' , true ),
+				'photo_credit'  => get_post_meta( $post_id , '_featured_image_photo_credit' , true ),
+			);
+		
+			$this->set_featured_image( $img_array );
+			
+			return true;
+			
+		} // end if
+		
+		return false;
+		
+	} // end do_set_featured_image
 	
 	
 	public function do_register(){
