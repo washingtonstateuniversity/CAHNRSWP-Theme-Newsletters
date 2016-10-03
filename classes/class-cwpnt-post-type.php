@@ -47,13 +47,13 @@ abstract class CWPNT_Post_type {
 		
 		add_action( 'init' , array( $this , 'do_register' ) );
 		
-		if ( method_exists( $this , 'do_action_edit_form_after_title' ) ){
+		if ( method_exists( $this , 'do_action_edit_form_after_title' ) && is_admin() ){
 			
 			add_action( 'edit_form_after_title' , array( $this , 'action_edit_form_after_title' ) , 10 );
 			
 		} // end if
 		
-		if ( method_exists( $this , 'do_action_admin_enqueue_scripts' ) ) {
+		if ( method_exists( $this , 'do_action_admin_enqueue_scripts' ) && is_admin() ) {
 			
 			add_action( 'admin_enqueue_scripts', array( $this , 'do_action_admin_enqueue_scripts' ) , 10 );
 			

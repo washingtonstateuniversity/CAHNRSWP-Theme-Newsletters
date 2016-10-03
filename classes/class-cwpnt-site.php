@@ -31,7 +31,13 @@ class CWPNT_Site {
 		
 		add_action( 'init', array( $this , 'do_register_menus' ) );
 		
-		add_action( 'admin_menu', array( $this ,'do_remove_menu_items' ), 99 );
+		if ( is_admin() ) {
+			
+			add_action( 'admin_menu', array( $this ,'do_remove_menu_items' ), 99 );
+			
+			add_action( 'admin_enqueue_scripts', array( $this , 'do_action_admin_enqueue_scripts' ) , 10 );
+			
+		} // end if;
 		
 	} // end init
 	
@@ -41,6 +47,17 @@ class CWPNT_Site {
 		 register_nav_menu('newsletter-menu-extra' , 'Newsletter Menu Extra');
 		 
 	 } // end do_register_menus
+	 
+	 
+	 public function do_action_admin_enqueue_scripts( $hook ){
+		
+		//wp_enqueue_script('media-upload');
+   	 	//wp_enqueue_script('thickbox');
+		//wp_enqueue_style('thickbox');
+		wp_enqueue_style( 'cwpnt-admin' , $this->get_theme_url() . '/css/admin.css' , array(), CAHNRSWP_Theme_Newsletter::$version );
+		wp_enqueue_script( 'cwpnt-admin' , $this->get_theme_url() . '/js/admin.js', array(), CAHNRSWP_Theme_Newsletter::$version, true );
+		
+	} // end 
 	 
 	 
 	 public function do_remove_menu_items(){
