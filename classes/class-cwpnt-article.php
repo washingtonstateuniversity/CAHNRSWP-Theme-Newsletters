@@ -35,6 +35,22 @@ class CWPNT_Article extends CWPNT_Post_type {
 		'not_found'          => 'No Articles found.',
 		'not_found_in_trash' => 'No Articles found in Trash.',
 	);
+	
+	
+	public function do_action_edit_form_after_title( $post ){
+		
+		$html = $this->return_editor_summary( $post );
+		
+		echo $html;
+		
+	} // end do_edit_form_after_title
+	
+	
+	public function return_editor_summary( $post ){
+		
+		return 'summary field';
+		
+	} // end return_editor_summary
 
 	
 	

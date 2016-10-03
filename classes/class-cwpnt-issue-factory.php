@@ -27,19 +27,10 @@ class CWPNT_Issue_Factory extends CWPNT_Factory {
 	
 	public function return_issue(){
 		
-		require_once $this->theme_dir .'/classes/class-cwpnt-post-type.php';
-		require_once $this->theme_dir .'/classes/class-cwpnt-issue.php';
-		
-		if ( is_admin() ){
+		require_once 'class-cwpnt-post-type.php';
+		require_once 'class-cwpnt-issue.php';
 			
-			require_once $this->theme_dir .'/classes/class-cwpnt-issue-admin.php';
-			$issue = new CWPNT_Issue_Admin( $this->theme_dir , $this->theme_url );
-			
-		} else {
-			
-			$issue = new CWPNT_Issue( $this->theme_dir , $this->theme_url );
-			
-		} // end if
+		$issue = new CWPNT_Issue();
 		
 		return $issue;
 		

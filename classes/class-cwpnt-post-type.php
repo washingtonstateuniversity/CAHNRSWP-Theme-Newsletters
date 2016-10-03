@@ -4,7 +4,6 @@ abstract class CWPNT_Post_type {
 	
 	protected $theme_dir;
 	protected $theme_url;
-	
 	protected $slug;
 	protected $labels;
 	protected $args;
@@ -13,6 +12,7 @@ abstract class CWPNT_Post_type {
 	protected $content = '';
 	protected $excerpt = '';
 	protected $link = '';
+	
 	
 	public function get_theme_dir() { return $this->theme_dir; }
 	public function get_theme_url() { return $this->theme_url; }
@@ -25,6 +25,7 @@ abstract class CWPNT_Post_type {
 	public function get_excerpt() { return $this->excerpt; }
 	public function get_link() { return $this->link; }
 	
+	
 	public function set_theme_dir( $dir ) { $this->theme_dir = $dir; }
 	public function set_theme_url( $url ) { $this->theme_url = $url; }
 	public function set_id( $title ) { $this->title = $title; }
@@ -34,10 +35,10 @@ abstract class CWPNT_Post_type {
 	public function set_link( $link ) { $this->link = $link; }
 	
 	
-	public function __construct(  $theme_dir = '' , $theme_url = '' ){
+	public function __construct(){
 		
-		$this->set_theme_dir( $theme_dir );
-		$this->set_theme_url( $theme_url );
+		$this->set_theme_dir( get_stylesheet_directory() );
+		$this->set_theme_url( get_stylesheet_directory_uri() );
 		
 	} // end __construct
 	

@@ -27,7 +27,7 @@ class CWPNT_Site {
 		
 	} // end __construct
 	
-	public function init(){
+	public function do_init(){
 		
 		add_action( 'init', array( $this , 'do_register_menus' ) );
 		

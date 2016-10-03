@@ -33,18 +33,18 @@ class CAHNRSWP_Theme_Newsletter {
 	 private function do_init(){
 		 
 		 require_once 'classes/class-cwpnt-site.php';
-		 $this->site = new CWPNT_Site();
-		 $this->site->init();
+		 $this->site = new CWPNT_Site( true );
+		 $this->site->do_init();
 		 
 		 require_once 'classes/class-cwpnt-factory.php';
 		 
 		 require_once 'classes/class-cwpnt-issue-factory.php';
-		 $this->issue_factory = new CWPNT_Issue_Factory( $this->site->get_theme_dir() , $this->site->get_theme_url() );
+		 $this->issue_factory = new CWPNT_Issue_Factory();
 		 $issue = $this->issue_factory->return_issue();
 		 $issue->do_init();
 		 
 		 require_once 'classes/class-cwpnt-article-factory.php';
-		 $this->article_factory = new CWPNT_Article_Factory( $this->site->get_theme_dir() , $this->site->get_theme_url() );
+		 $this->article_factory = new CWPNT_Article_Factory();
 		 $article = $this->article_factory->return_article();
 		 $article->do_init(); 
 		 

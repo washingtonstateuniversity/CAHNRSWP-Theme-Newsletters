@@ -35,13 +35,6 @@ class CWPNT_Issue extends CWPNT_Post_type {
 		'not_found'          => 'No Issues found.',
 		'not_found_in_trash' => 'No Issues found in Trash.',
 	);
-
-	
-	public function do_init(){
-		
-		parent::do_init();
-		
-	} // end do_init
 	
 	
 	public function do_set_issue_by_wp_post( $post ){
@@ -49,6 +42,32 @@ class CWPNT_Issue extends CWPNT_Post_type {
 		$this->do_set_by_wp_post( $post );
 		
 	} // end do_set_issue_by_wp_post
+	
+	
+	public function do_action_admin_enqueue_scripts( $hook ){
+		
+		if ( 'edit.php' != $hook && 'post.php' != $hook ) {
+			
+        	return;
+			
+    	} // end if
+		
+		//wp_enqueue_script('media-upload');
+   	 	//wp_enqueue_script('thickbox');
+		//wp_enqueue_style('thickbox');
+		wp_enqueue_style( 'issue-editor' , $this->get_theme_url() . '/css/issue-editor.css' , array(), CAHNRSWP_Theme_Newsletter::$version );
+		wp_enqueue_script( 'issue-editor' , $this->get_theme_url() . '/js/issue-editor.js', array(), CAHNRSWP_Theme_Newsletter::$version, true );
+		
+	} // end 
+	
+	
+	public function do_action_edit_form_after_title( $post ){
+		
+		$html = $this->return_select_feature_area( $post );
+		
+		echo $html;
+		
+	} // end do_edit_form_after_title
 	
 	
 	public function return_feature_area( $spineless = false ){
@@ -61,6 +80,20 @@ class CWPNT_Issue extends CWPNT_Post_type {
 	
 	public function return_secondary_features( $spineless = false ){
 	} // return_secondary_features
+	
+	
+	public function return_select_feature_area( $post ){
+		
+		$img_src = $this->get_theme_url() . '/images/placeholder.png';
+		$select_slides = '';
+		
+		ob_start();
+		
+		include $this->get_theme_dir() . '/inc/inc-issue-editor-featured-image.php';
+		
+		return ob_get_clean();
+		
+	} // end return_select_feature_area
 	
 	
 } // end class
