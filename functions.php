@@ -43,12 +43,12 @@ class CAHNRSWP_Theme_Newsletter {
 		 require_once 'classes/class-cwpnt-issue-factory.php';
 		 $this->issue_factory = new CWPNT_Issue_Factory();
 		 $issue = $this->issue_factory->return_issue();
-		 $issue->do_init();
+		 $issue->init();
 		 
 		 require_once 'classes/class-cwpnt-article-factory.php';
 		 $this->article_factory = new CWPNT_Article_Factory();
 		 $article = $this->article_factory->return_article();
-		 $article->do_init(); 
+		 $article->init(); 
 		 
 	 } // end do_init
 	 

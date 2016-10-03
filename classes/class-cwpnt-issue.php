@@ -2,9 +2,9 @@
 
 class CWPNT_Issue extends CWPNT_Post_type {
 	
-	protected $slug = 'issue';
+	protected $post_type = 'issue';
 	
-	protected $args = array(
+	protected $post_type_args = array(
 		'description'        => 'Description.',
 		'public'             => true,
 		'publicly_queryable' => true,

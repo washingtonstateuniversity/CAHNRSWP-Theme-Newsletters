@@ -3,7 +3,7 @@
         <div class="cwpnt-column column-one">
         	<div class="cwpnt-field">
             	<label class="req">Subtitle</label>
-                <input type="text" name="_subtitle" value=""   placeholder="Subtitle/Long Title Goes Here" />
+                <input type="text" name="_subtitle" value="<?php echo $subtitle;?>"   placeholder="Subtitle/Long Title Goes Here" />
             </div>
         </div>
 	</div>

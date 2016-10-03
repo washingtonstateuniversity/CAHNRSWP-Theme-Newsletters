@@ -58,6 +58,8 @@
 .cwpnt-editor .cwpnt-row.sidebar-left-layout .cwpnt-column.column-one { width: 25%; }
 .cwpnt-editor .cwpnt-row.sidebar-left-layout .cwpnt-column.column-two { width: 75%; }
 
+.cwpnt-editor .cwpnt-row.quarter-layout .cwpnt-column { width: 25%; }
+
 .cwpnt-editor .cwpnt-row.half-layout .cwpnt-column { width: 50%; }
 
 .cwpnt-editor .cwpnt-field {

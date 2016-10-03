@@ -1,150 +1,539 @@
 <?php
 
+// class DBWP_Post_Abstract //@verson 0.1.1
+
 abstract class CWPNT_Post_type {
 	
-	protected $theme_dir;
-	protected $theme_url;
-	protected $slug;
+	protected $author_id;
+	protected $id;
 	protected $labels;
-	protected $args;
-	protected $id = '';
-	protected $title = '';
-	protected $content = '';
-	protected $excerpt = '';
-	protected $link = '';
-	protected $featured_image = array();
+	protected $meta_data = array();
+	protected $meta_fields = array();
+	protected $nonce_action = 'edit_post';
+	protected $nonce_name = '_post_wp_nonce';
+	protected $post;
+	protected $post_excerpt;
+	protected $post_content;
+	protected $post_date;
+	protected $post_img_id;
+	protected $post_img_src = '';
+	protected $post_img_src_thumb = '';
+	protected $post_modified;
+	protected $post_name;
+	protected $post_parent;
+	protected $post_status;
+	protected $post_title;
+	protected $post_type;
+	protected $post_type_args;
+	protected $priorities = array();
+	protected $save_meta = true;
+	protected $scripts_editor_only = true;
+	protected $scripts_single_only = true;
+	protected $taxonomies = array();
 	
 	
-	public function get_theme_dir() { return $this->theme_dir; }
-	public function get_theme_url() { return $this->theme_url; }
-	public function get_slug(){ return $this->slug; }
-	public function get_labels(){ return $this->labels; }
-	public function get_args() { return $this->args; }
+	/** Get Methods
+	* ------------------------------------------------------------------------- */
+	
+	
+	public function get_author_id(){ return $this->author_id; }
 	public function get_id() { return $this->id; }
-	public function get_title() { return $this->title; }
-	public function get_content() { return $this->content; }
-	public function get_excerpt() { return $this->excerpt; }
-	public function get_link() { return $this->link; }
-	public function get_featured_image() { return $this->featured_image; }
+	public function get_labels() { return $this->labels; }
+	public function get_meta_data( $key = false , $post_id = false ) { return ( $key ) ? $this->return_meta_value( $key , $post_id ) : $this->meta_data; }
+	public function get_meta_fields() { return $this->meta_fields; }
+	public function get_meta_field( $key , $post_id = false  ) { return $this->return_meta_value( $key , $post_id ); }
+	public function get_nonce_action() { return '_' . $this->get_post_type() . '_' . $this->nonce_action; }
+	public function get_nonce_name() { return $this->nonce_name; }
+	public function get_post() { return $this->post; }
+	public function get_post_excerpt() { return $this->post_excerpt; }
+	public function get_post_content( $filter = false ) { return ( $filter ) ? apply_filters( 'the_content' , $this->post_content ) : $this->post_content; }
+	public function get_post_date() { return $this->post_date; }
+	public function get_post_img_id() { return $this->post_img_id; }
+	public function get_post_img_src() { return $this->post_img_src; }
+	public function get_post_img_src_thumb() { return $this->post_img_src_thumb; }
+	public function get_post_modified() { return $this->post_modified; }
+	public function get_post_name() { return $this->post_name; }
+	public function get_post_parent(){ return $this->post_parent; }
+	public function get_post_status() { return $this->post_status; }
+	public function get_post_title( $filter = false ) { return ( $filter ) ? apply_filters( 'the_title' , $this->post_title ) : $this->post_title; }
+	public function get_post_type() { return $this->post_type; }
+	public function get_post_type_args() { return $this->post_type_args; }
+	public function get_priorities() { return $this->priorities; }
+	public function get_save_meta() { return $this->save_meta; }
+	public function get_scripts_editor_only() { return $this->scripts_editor_only; }
+	public function get_scripts_single_only() { return $this->scripts_single_only; }
+	public function get_taxonomies() { return $this->taxonomies; }
 	
 	
-	public function set_theme_dir( $dir ) { $this->theme_dir = $dir; }
-	public function set_theme_url( $url ) { $this->theme_url = $url; }
-	public function set_id( $title ) { $this->title = $title; }
-	public function set_title( $title ) { $this->title = $title; }
-	public function set_content( $content ) { $this->content = $content; }
-	public function set_excerpt( $excerpt ) { $this->excerpt = $excerpt; }
-	public function set_link( $link ) { $this->link = $link; }
-	public function set_featured_image( $img_array ) { $this->featured_image = $img_array; }
+	/** Construct Method
+	* ------------------------------------------------------------------------- */
 	
 	
-	public function __construct(){
+	public function __construct( array $taxonomies = array()  ){
 		
-		$this->set_theme_dir( get_stylesheet_directory() );
-		$this->set_theme_url( get_stylesheet_directory_uri() );
+		$this->set_taxonomies( $taxonomies );
 		
 	} // end __construct
 	
 	
-	public function do_init(){
-		
-		add_action( 'init' , array( $this , 'do_register' ) );
-		
-		if ( is_admin() ){
-		
-			if ( method_exists( $this , 'do_action_edit_form_after_title' ) ){
-				
-				add_action( 'edit_form_after_title' , array( $this , 'action_edit_form_after_title' ) , 10 );
-				
-			} // end if
-			
-			if ( method_exists( $this , 'do_action_admin_enqueue_scripts' ) ) {
-				
-				add_action( 'admin_enqueue_scripts', array( $this , 'do_action_admin_enqueue_scripts' ) , 10 );
-				
-			} // end if;
-			
-			if ( method_exists( $this , 'do_action_edit_form_after_editor' ) ){
-				
-				add_action( 'edit_form_after_editor' , array( $this , 'action_edit_form_after_editor' ) , 10 );
-				
-			} // end if
-		
-		}
-		
-	} // end do_init
+	/** Init Methods
+	* ------------------------------------------------------------------------- */
 	
 	
-	public function action_edit_form_after_title( $post ){
+	public function init(){
 		
-		if ( $this->get_slug() == $post->post_type ){
+		$post_type_args = $this->get_post_type_args();
+		
+		if ( ! empty( $post_type_args ) ){
 			
-			$this->do_action_edit_form_after_title( $post );
+			add_action( 'init' , array( $this , 'action_register_post_type' ) , $this->return_priority( 'register_post_type' ) );
 			
 		} // end if
 		
-	} // end action_edit_form_after_title
+		if ( method_exists( $this , 'the_scripts_public' ) ){
+			
+			add_action( 'wp_enqueue_scripts', array( $this , 'action_wp_enqueue_scripts' ) , $this->return_priority( 'wp_enqueue_scripts' ) );
+			
+		} // end if
+		
+		if ( is_admin() ){
+
+			$this->init_admin();
+		
+		} // end if
+		
+	} // end init
+	
+	
+	protected function init_admin(){
+		
+		if ( method_exists( $this , 'the_edit_form_after_title' ) ){
+			
+			add_action( 'edit_form_after_title' , array( $this , 'action_edit_form_after_title' ), $this->return_priority( 'edit_form_after_title' ) ); 
+			
+		} // end if
+		
+		if ( method_exists( $this , 'the_edit_form_after_editor' ) ){
+			
+			add_action( 'edit_form_after_editor' , array( $this , 'action_edit_form_after_editor' ), $this->return_priority( 'edit_form_after_editor' ) );
+			
+		} // end if
+		
+		if ( method_exists( $this , 'the_scripts_admin' ) ){
+			
+			add_action( 'admin_enqueue_scripts', array( $this , 'action_admin_enqueue_scripts' ) , $this->return_priority( 'admin_enqueue_scripts' ) , 1 );
+			
+		} // end if
+		
+		$meta_fields = $this->get_meta_fields();
+		
+		if ( $this->get_save_meta() && ! empty( $meta_fields ) ){
+			
+			add_action( 'save_post_' . $this->get_post_type(), array( $this , 'action_save_post' ), $this->return_priority( 'action_save_post' ) , 3 );
+			
+		} // end if
+		
+	} // end init_admin
+	
+	
+	/** Set Methods
+	* ------------------------------------------------------------------------- */
+	
+	
+	// Property Sets
+	
+	public function set_author_id( $value ){ $this->author_id = $value; }
+	public function set_id( $value ) { $this->id = $value; }
+	public function set_labels( $value ) { $this->labels = $value; }
+	public function set_meta_data( $value ) { $this->meta_data = $value; }
+	public function set_meta_data_value( $key , $value ){ $this->meta_data[ $key ] = $value; }
+	public function set_meta_fields( $value ) { $this->meta_fields = $value; }
+	public function set_post( $value ) { $this->post = $value; }
+	public function set_post_excerpt( $value ) { $this->post_excerpt = $value; }
+	public function set_post_content( $value ) { $this->post_content = $value; }
+	public function set_post_date( $value ) { $this->post_date = $value; }
+	public function set_post_img_id( $value ) { $this->post_img_id = $value; }
+	public function set_post_img_src( $value ) { $this->post_img_src = $value; }
+	public function set_post_img_src_thumb( $value ) { $this->post_img_src_thumb = $value; }
+	public function set_post_modified( $value ) { $this->post_modified = $value; }
+	public function set_post_name( $value ) { $this->post_name = $value; }
+	public function set_post_parent( $value ){ $this->post_parent = $value; }
+	public function set_post_status( $value ) { $this->post_status = $value; }
+	public function set_post_title( $value ) { $this->post_title = $value; }
+	public function set_post_type_args( $value ) { $this->post_type_args = $value; }
+	public function set_priorities( $value ) { $this->priorities = $value; }
+	public function set_save_meta( $value ) { $this->save_meta = $value; }
+	public function set_taxonomies( $value ) { $this->taxonomies = $value; }
+	
+	
+	// Object Sets
+	
+	public function set_by_wp_post( $post , $meta_by = 'post_id' ){
+		
+		if ( is_numeric( $post ) ){ // post is id
+			
+			$post = get_post( $post );
+			
+		} // end if
+		
+		$this->set_wp_post_values( $post );
+		
+		switch( $meta_by ){
+			
+			case 'post_id':
+				$this->set_meta_data_values_by_post_id( $post->ID );
+				$this->set_values_by_post_id( $post->ID );
+				break;
+			case 'form':
+				$this->set_meta_data_values_by_form();
+				break;
+		} // end switch
+		
+	} // set_by_wp_post
+	
+	
+	public function set_wp_post_values( $wp_post ){
+		
+		$this->set_id( $wp_post->ID );
+		$this->set_author_id( $wp_post->post_author );
+		$this->set_post_name( $wp_post->post_name );
+		$this->set_post_title( $wp_post->post_title );
+		$this->set_post_date( $wp_post->post_date );
+		$this->set_post_content( $wp_post->post_content );
+		$this->set_post_excerpt( $wp_post->post_excerpt );
+		$this->set_post_status( $wp_post->post_status );
+		$this->set_post_parent( $wp_post->post_parent );
+		$this->set_post_modified( $wp_post->post_modified );
+		
+	} // end set_wp_post_values
+	
+	
+	public function set_values_by_post_id( $post_id ){
+		
+		$this->set_post_img_id( get_post_thumbnail_id( $post_id ) );
+		
+		$thumbnail_img = wp_get_attachment_image_src( $this->get_post_img_id() );
+		$this->set_post_img_src_thumb( $thumbnail_img[0] );
+		
+		$full_img = wp_get_attachment_image_src( $this->get_post_img_id() , 'full' );
+		$this->set_post_img_src( $full_img[0] );
+		
+		
+	} // end set_values_by_post_id
+	
+	
+	public function set_meta_data_values_by_post_id( $post_id ){
+		
+		$meta_fields = $this->get_meta_fields();
+		
+		$post_meta = get_post_meta( $post_id );
+		
+		if ( ! empty( $meta_fields ) ){
+			
+			foreach( $meta_fields as $key => $default ){
+				
+				if ( array_key_exists( $key , $post_meta ) ){
+					
+					$meta_value = get_post_meta( $post_id , $key , true );
+					
+					$meta_fields[ $key ] = $meta_value;
+					
+				} // end if
+					
+			} // end foreach
+			
+		} // end if
+		
+		$this->set_meta_data( $meta_fields );
+		
+	} // end set_meta_data_values
+	
+	
+	public function set_meta_data_values_by_form(){
+		
+		$save_fields = array();
+		
+		$meta_fields = $this->get_meta_fields();
+		
+		if ( ! empty( $meta_fields ) ){
+			
+			foreach( $meta_fields as $key => $default ){
+				
+				if ( isset( $_POST[ $key ] ) ){
+					
+					$save_fields[ $key ] = $_POST[ $key ];
+					
+				} // end if
+		
+			} // end foreach
+			
+		} // end if
+		
+		if ( $save_fields ){
+		
+			$clean_fields = $this->return_clean_meta( $save_fields );
+		
+			$this->set_meta_data( $clean_fields );
+			
+		} // end if
+		
+	} // end set_meta_data_values_by_form
+	
+	
+	/** Action Methods
+	* ------------------------------------------------------------------------- */
+	
+	
+	public function action_admin_enqueue_scripts( $hook ){
+		
+		if ( $this->get_scripts_editor_only() && ( 'post.php' != $hook ) ){
+			
+			return;
+			
+		} // end if
+			
+		$this->the_scripts_admin();
+		
+	} // end if
 	
 	
 	public function action_edit_form_after_editor( $post ){
 		
-		if ( $this->get_slug() == $post->post_type ){
+		if ( $post->post_type == $this->get_post_type() ){
 			
-			$this->do_action_edit_form_after_editor( $post );
+			wp_nonce_field( $this->return_nonce_action( $post->ID ) , $this->get_nonce_name() );
 			
+			if ( ! isset( $this->post ) ) $this->set_by_wp_post( $post );
+		
+			$this->the_edit_form_after_editor( $post , $this->get_meta_data() );
+			
+		} // end if
+		
+	} // end action_edit_form_after_editor
+	
+	
+	public function action_edit_form_after_title( $post ){
+		
+		if ( $post->post_type == $this->get_post_type() ){
+			
+			wp_nonce_field( $this->return_nonce_action( $post->ID ) , $this->get_nonce_name() );
+		
+			if ( ! isset( $this->post ) ) $this->set_by_wp_post( $post );
+		
+			$this->the_edit_form_after_title( $post , $this->get_meta_data() );
+		
 		} // end if
 		
 	} // end action_edit_form_after_title
 	
 	
-	public function do_set_by_wp_post( $post ){
+	public function action_register_post_type(){
 		
-		if ( is_numeric( $post ) ) $post = get_post( $post );
+		$post_type_args = $this->return_post_type_args();
 		
-		$this->set_id( $post->ID );
-		$this->set_title( $post->post_title );
-		$this->set_content( $post->post_content );
-		$this->set_excerpt( $post->post_excerpt );
-		$this->set_link( get_post_permalink( $this->get_id() ) );
+		register_post_type( $this->get_post_type() , $post_type_args );
 		
-	} // end do_set_issue_by_wp_post
+	} // end register_post_type
 	
 	
-	public function do_set_featured_image( $size = 'large' , $post_id = false ){
+	public function action_save_post( $post_id , $post, $update ){
 		
-		if ( ! $post_id ) $post_id = $this->get_id();
+		if ( is_admin() && $this->return_do_save( $post_id , $post, $update ) ){
+			
+			$this->set_by_wp_post( $post , 'form' );
+			
+			$meta = $this->get_meta_data();
+			
+			foreach( $meta as $key => $value ){
+				
+				update_post_meta( $post_id , $key , $value );
+				
+			} // end foreach
+			
+		} // end if
 		
-		if ( has_post_thumbnail( $post_id ) ){
-			
-			$thumb_id = get_post_thumbnail_id( $post_id );
-			$image = wp_get_attachment_image_src( $thumb_id , $size );
-			
-			$img_array = array(
-				'src'           => $image[0],
-				'id'            => $thumb_id,
-				'caption_title' => get_post_meta( $post_id , '_featured_image_caption_title' , true ),
-				'caption'       => get_post_meta( $post_id , '_featured_image_caption' , true ),
-				'photo_credit'  => get_post_meta( $post_id , '_featured_image_photo_credit' , true ),
-			);
+	} // end action_save_post
+	
+	
+	public function action_wp_enqueue_scripts(){
 		
-			$this->set_featured_image( $img_array );
+		if ( $this->get_scripts_single_only() && ! is_singular( $this->get_post_type() ) ){
 			
-			return true;
+			return;
 			
+		} // end if
+			
+		$this->the_scripts_public();
+		
+	} // end if
+	
+	
+	/** Return Methods
+	* ------------------------------------------------------------------------- */
+	
+	
+	protected function return_clean_meta( $meta ){
+		
+		return array();
+		
+	} // end return_clean_meta
+	
+	
+	protected function return_do_save( $post_id , $post, $update ){
+		
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			
+			return false;
+			
+		} // end if
+		
+		// Verify that the input is coming from the proper form
+		if ( ! wp_verify_nonce( $_POST[ $this->get_nonce_name() ] , $this->return_nonce_action( $post_id ) ) ) {
+			
+			return false;
+			
+		} // end if
+		
+		// Check the user's permissions.
+		if ( isset( $_POST['post_type'] ) && 'page' == $_POST['post_type'] ) {
+
+			if ( current_user_can( 'edit_page', $post_id ) ) {
+
+				return true;
+
+			} // end if
+
+		} else {
+
+			if ( current_user_can( 'edit_post', $post_id ) ) {
+
+				return true;
+
+			} // end if
+
 		} // end if
 		
 		return false;
 		
-	} // end do_set_featured_image
+	} // end return_do_save
 	
 	
-	public function do_register(){
+	public function return_meta_value( $key , $post_id = false ){
 		
-		$args = $this->get_args();
-		$args['labels'] = $this->get_labels();
+		$meta = $this->get_meta_data();
 		
-		register_post_type( $this->get_slug() , $args );
+		if ( array_key_exists( $key , $meta ) ){
+			
+			return $meta[ $key ];
+			
+		} else {
+			
+			return '';
+			
+		} // end if
 		
-	} // end do_register
+	} // end return_field_value
 	
-} // end class
+	
+	public function return_nonce_action( $post_id ){
+		
+		return $this->get_nonce_action() . '_' . $post_id;
+		
+	} // end return_nonce_action
+	
+	
+	public function return_post_type_args(){
+		
+		$type_args = $this->get_post_type_args();
+		
+		$type_args['labels'] = $this->get_labels();
+		
+		$taxonomies = $this->return_taxonomy_slugs();
+		
+		if ( $taxonomies ){
+			
+			if ( ! empty( $type_args['taxonomies'] ) ){
+			
+				$taxonomies = array_merge( $type_args['taxonomies'] , $taxonomies );
+				
+			} // end if
+			
+			$type_args['taxonomies'] = $taxonomies;
+			
+		} // end if
+		
+		return $type_args;
+		
+	} // end build_post_type_args
+	
+	
+	public function return_priority( $action ){
+		
+		$priorities = $this->get_priorities();
+		
+		if ( array_key_exists( $action , $priorities ) ){
+			
+			return $priorities[ $action ];
+			
+		} else {
+			
+			return 10;
+			
+		}// end if
+		
+	} // end return_priority
+	
+	
+	public function return_sanitized_text_fields( $meta , $fields ){
+		
+		$clean = array();
+		
+		if ( ! empty( $fields ) ){
+			
+			foreach( $fields as $key ){
+				
+				$clean[ $key ] = sanitize_text_field( $meta[ $key ] );
+				
+			} // end foreach
+			
+		} // end if
+		
+		return $clean;
+		
+	} // end return_sanitized_text_fields
+	
+	
+	public function return_taxonomy_slugs(){
+		
+		$taxonomies = array();
+		
+		$tax_objs = $this->get_taxonomies();
+		
+		if ( ! empty( $tax_objs ) ){
+			
+			foreach( $tax_objs as $index => $tax_obj ){
+				
+				if ( is_object( $tax_obj ) && method_exists( $tax_obj , 'get_slug' ) ){
+					
+					$taxonomies[] = $tax_obj->get_slug();
+					
+				} // end if
+				
+			} // end foreach
+			
+		} // end if
+		
+		return $taxonomies;
+		
+	} // end return_taxonomy_slugs
+	
+	
+	/** Utility Methods
+	* ------------------------------------------------------------------------- */
+	
+	
+	/** Other Methods
+	* ------------------------------------------------------------------------- */
+	
+	
+}
