@@ -7,7 +7,8 @@
                 <div class="img-bg" style="background-image:url(<?php echo $primary_img_src;?>);"></div>
                 <div class="cwpnt-field">
                     <a href="#" class="cwpnt-button insert-image">Select Image</a>
-                    <input type="text" name="_primary_image_id" class="insert-image-id" /> 
+                    <input type="text" name="_primary_image_id" class="insert-image-id" />
+                    <input type="text" name="_primary_image_src" class="insert-image-src" /> 
                 </div>
                 <div class="cwpnt-field">
                 <input type="text" name="_primary_image_title" value="" placeholder="Caption Title Here" />
@@ -26,7 +27,8 @@
                 <div class="img-bg" style="background-image:url(<?php echo $secondary_img_src;?>);"></div>
                 <div class="cwpnt-field">
                     <a href="#" class="cwpnt-button insert-image">Select Image</a>
-                    <input type="text" name="_secondary_image_id" class="insert-image-id" /> 
+                    <input type="text" name="_secondary_image_id" class="insert-image-id" />
+                    <input type="text" name="_primary_image_src" class="insert-image-src" /> 
                 </div>
                 <div class="cwpnt-field">
                 <input type="text" name="_secondary_image_title" value="" placeholder="Caption Title Here" />
